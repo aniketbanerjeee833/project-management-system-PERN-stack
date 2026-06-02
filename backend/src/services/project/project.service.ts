@@ -3,6 +3,7 @@ import {
   findWorkspaceMember,
   findMemberById,
   CreateProjectInput,
+  fetchAllProjectsRepo,
 } from "../../repositories/project/project.repository";
 import { Project } from "../../types/project.types";
 import {AppError} from "../../utils/AppError";
@@ -57,6 +58,10 @@ export async function createProjectService(
     due_date,
   };
 
-  const project = await createProjectRepo(input);
-  return project;
+ return createProjectRepo(input);
+ 
+}
+export async function fetchAllProjectsService(workspace_id: number): Promise<Project[]> {
+  return  fetchAllProjectsRepo(workspace_id);
+  
 }

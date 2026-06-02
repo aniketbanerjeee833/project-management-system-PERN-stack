@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Search } from 'lucide-react';
 import ProjectCard from '../../components/cards/ProjectCard';
-import { projects as mockProjects } from '../../data/mockData';
+// import { projects asprojects } from '../../data/mockData';
 
 import ProjectModal, { type Manager, type ProjectFormData } from '../../components/modal/ProjectModal';
 import { useProjectQueries } from '../../hooks/api/useProjectQueries';
@@ -41,8 +41,10 @@ const AdminProjects: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<(ProjectFormData & { id: number }) | null>(null);
   const [submitting, setSubmitting] = useState(false);
-    const {createProject} = useProjectQueries(workspaceId);
-  const filtered = mockProjects.filter(p =>
+    const {createProject,projects} = useProjectQueries(workspaceId);
+    const projectList = projects.data ?? [];
+    console.log('projects', projectList);
+  const filtered = projectList?.filter(p =>
     (filter === 'all' || p.status === filter) &&
     p.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -73,6 +75,13 @@ const AdminProjects: React.FC = () => {
 
   const handleSubmit = async (data: ProjectFormData) => {
     setSubmitting(true);
+    const payload = {
+  ...data,
+  manager_id:
+    data.manager_id === ""
+      ? undefined
+      : Number(data.manager_id)
+};
     try {
       if (editingProject) {
         // ── EDIT ──────────────────────────────────────────────────────────
@@ -81,8 +90,8 @@ const AdminProjects: React.FC = () => {
       } else {
         // ── CREATE ────────────────────────────────────────────────────────
         // await api.post(`/workspaces/${workspaceId}/projects`, data);
-        await createProject.mutateAsync(data);
-        console.log('CREATE project', data);
+        await createProject.mutateAsync(payload);
+        console.log('CREATE project', payload);
       }
       setModalOpen(false);
       // Refresh your project list here (invalidate query / re-fetch)
@@ -107,7 +116,7 @@ const AdminProjects: React.FC = () => {
         <div>
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">Projects</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            {mockProjects.length} total projects
+            {projectList.length} total projects
           </p>
         </div>
         <button

@@ -11,7 +11,7 @@ const app: Application = express();
 
 // ── Global middlewares ───────────────────────────────────────
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:3000",
+  origin: process.env.CLIENT_URL || "http://localhost:5174",
   credentials: true, // needed later when you add cookies
 }));
 

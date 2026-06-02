@@ -27,6 +27,22 @@ export async function createProjectRepo(
   return rows[0];
 }
 
+export async function fetchAllProjectsRepo(workspace_id: number): Promise<Project[]> {
+  const { rows } = await pool.query<Project>(
+    `SELECT id,name,description,status,manager_id,
+    
+      TO_CHAR(start_date, 'YYYY-MM-DD') AS start_date,
+      TO_CHAR(due_date, 'YYYY-MM-DD') AS due_date,
+    created_at,updated_at
+     FROM projects
+     WHERE workspace_id = $1
+     ORDER BY created_at DESC
+     `,
+    [workspace_id]
+  );
+  return rows;
+}
+
 /** Used by the service to guard: is this user actually in the workspace? */
 export async function findWorkspaceMember(
   workspace_id: number,

@@ -1,6 +1,7 @@
-import { Request, Response } from "express";
-import { createProjectService } from "../../services/project/project.service";
+import {  Response } from "express";
+import { createProjectService, fetchAllProjectsService } from "../../services/project/project.service";
 import { successResponse } from "../../utils/response";
+import { AuthRequest } from "../../types/auth.types";
 
 /**
  * POST /workspaces/:workspaceId/projects/:workspace_id
@@ -9,7 +10,7 @@ import { successResponse } from "../../utils/response";
  * Access: admin | manager only  (enforced inside the service)
  */
 export async function createProjectController(
-  req: Request,
+  req: AuthRequest,
   res: Response
 ): Promise<void> {
   const workspace_id = Number(req.params.workspaceId);
@@ -37,4 +38,17 @@ export async function createProjectController(
   });
 
   successResponse(res, project, "Project created successfully.", 201);
+}
+
+export async function getAllProjectsController(
+  req: AuthRequest,
+  res: Response
+): Promise<void> {
+  const workspace_id = Number(req.params.workspaceId);
+  if(!workspace_id) {
+    res.status(400).json({ success: false, message: "Workspace ID is required." });
+    return;
+  }
+  const projects = await fetchAllProjectsService(workspace_id);
+  successResponse(res, projects, "Projects fetched successfully.");
 }

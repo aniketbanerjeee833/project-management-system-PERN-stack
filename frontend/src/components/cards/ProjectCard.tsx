@@ -1,9 +1,9 @@
 
 import { motion } from 'framer-motion'
-import { Calendar, Users, MoreHorizontal } from 'lucide-react'
+import { Calendar,  MoreHorizontal } from 'lucide-react'
 import type { Project } from '../../types'
 import Badge from '../shared/Badge'
-import { formatDate } from '../../utils'
+// import { formatDate } from '../../utils'
 
 interface ProjectCardProps {
   project: Project
@@ -11,6 +11,7 @@ interface ProjectCardProps {
 }
 
 const ProjectCard= ({ project, delay = 0 }: ProjectCardProps) => {
+  console.log(project);
   const statusVariant = project.status === 'completed' ? 'success' : project.status === 'archived' ? 'default' : 'info'
   return (
     <motion.div
@@ -22,7 +23,9 @@ const ProjectCard= ({ project, delay = 0 }: ProjectCardProps) => {
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-sm flex-shrink-0" style={{ background: project.color }}>
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-sm flex-shrink-0"
+          //  style={{ background: project.color }}
+           >
             {project.name[0]}
           </div>
           <div>
@@ -51,19 +54,22 @@ const ProjectCard= ({ project, delay = 0 }: ProjectCardProps) => {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-1.5 mb-4">
+      {/* <div className="flex flex-wrap gap-1.5 mb-4">
         {project.tags.map(tag => (
           <span key={tag} className="px-2 py-0.5 text-[10px] font-medium bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 rounded-full border border-slate-200/60 dark:border-slate-600/60">{tag}</span>
         ))}
-      </div>
+      </div> */}
 
       <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-700/60">
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 text-xs text-slate-400">
+          {/* <div className="flex items-center gap-1 text-xs text-slate-400">
             <Users size={11} /><span>{project.teamCount}</span>
-          </div>
-          <div className="flex items-center gap-1 text-xs text-slate-400">
-            <Calendar size={11} /><span>{formatDate(project.dueDate)}</span>
+          </div> */}
+          <div className="flex items-center gap-2 text-xs text-slate-400">
+            <Calendar size={11} />
+            <span className="truncate">Start: {project?.start_date || '—'}</span>
+            <span className="text-slate-300">•</span>
+            <span className="truncate">Due: {project?.due_date || '—'}</span>
           </div>
         </div>
         <Badge variant={statusVariant} size="sm">{project.status}</Badge>

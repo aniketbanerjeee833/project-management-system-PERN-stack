@@ -1,4 +1,5 @@
-import { Request, Response, NextFunction } from "express";
+import {  Response, NextFunction } from "express";
+import { AuthRequest } from "../types/auth.types";
 
 // ──────────────────────────────────────────────────────────────
 //  TEMPORARY STUB — replace with cookie/session logic later
@@ -6,7 +7,7 @@ import { Request, Response, NextFunction } from "express";
 // ──────────────────────────────────────────────────────────────
 
 export async function authenticate(
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> {
@@ -20,8 +21,8 @@ export async function authenticate(
   // Stub: attach a hardcoded user so you can test other endpoints now
   req.user = {
     id: 1,
-    email: "dev@test.com",
-    name: "Dev User",
+    email: "rahul@test.com",
+    name: "Rahul Admin",
   };
 
   next();

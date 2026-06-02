@@ -112,7 +112,7 @@ const ProjectModal = ({
     errors[key] ? (
       <p className="mt-1 text-xs text-red-500">{errors[key]}</p>
     ) : null;
-
+    console.log(form);
   return (
     <AnimatePresence>
       {open && (
