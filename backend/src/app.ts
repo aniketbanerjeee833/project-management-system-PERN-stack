@@ -10,10 +10,19 @@ import projectRoutes     from "./routes/project.routes";
 const app: Application = express();
 
 // ── Global middlewares ───────────────────────────────────────
-app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:5174",
-  credentials: true, // needed later when you add cookies
-}));
+// app.use(cors({
+//   origin: process.env.CLIENT_URL || "http://localhost:5174",
+//   credentials: true, // needed later when you add cookies
+// }));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174"
+    ],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -42,3 +51,42 @@ app.use((_req: Request, res: Response) => {
 app.use(errorHandler);
 
 export default app;
+
+
+
+
+
+
+
+
+
+
+
+
+// 1. ADMIN registers
+//    └── no token in URL → create workspace screen
+//    └── workspace row + workspace_members(role=admin) created
+
+// 2. ADMIN invites Priya as manager
+//    └── POST /invitations → invitations row inserted, email sent
+//    └── email contains /register?token=xyz
+
+// 3. PRIYA clicks link → register form
+//    └── POST /auth/register { name, email, password, token }
+//    └── users row created
+//    └── workspace_members(role=manager) created
+//    └── invitations status → accepted
+//    └── Priya lands on manager dashboard
+
+// 4. ADMIN creates a project, assigns Priya as manager_id
+//    └── projects row: manager_id = priya.id
+
+// 5. ADMIN invites Arjun as employee (same flow as step 2-3)
+//    └── workspace_members(role=employee) created
+
+// 6. PRIYA (manager) creates a task inside her project
+//    └── assigns assignee_id = arjun.id
+//    └── notification created for Arjun
+
+// 7. ARJUN (employee) logs in → sees only his tasks
+//    └── updates task status, logs time, adds comments
