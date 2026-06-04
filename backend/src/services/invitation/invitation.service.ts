@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import { insertInvitation } from "../../repositories/invitation/invitation.repository";
+import { sendEmail } from "../../utils/sendEmail";
 export async function sendInviteService(
   workspace_id: number,
   email: string,
@@ -19,7 +20,7 @@ export async function sendInviteService(
   );
  
   // TODO: plug in your email provider here (Resend / Nodemailer / SendGrid)
-  // await sendInviteEmail(email, token);
+   await sendEmail(email, token);
   console.log(`Invite link: ${process.env.FRONTEND_URL}/invite?token=${token}`);
  
   return invitation;
