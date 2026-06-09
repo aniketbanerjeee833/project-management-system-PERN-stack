@@ -6,7 +6,9 @@ import { errorHandler } from "./middlewares/errorHandler";
 // ── Route imports ────────────────────────────────────────────
 import projectRoutes     from "./routes/project.routes";
 import invitationRoutes   from "./routes/invitation.routes";
+import publicInvitationRoutes from "./routes/public.invitation.routes";
 import membersRoutes from "./routes/members.routes";
+import authRoutes from "./routes/auth.routes";
 
 const app: Application = express();
 
@@ -40,8 +42,10 @@ const API = "/api/v1";
 
 
 // workspace-scoped routes  →  /api/v1/workspaces/:workspaceId/projects
+app.use(`${API}/auth`, authRoutes);
 app.use(`${API}/workspaces/:workspaceId/projects`,    projectRoutes);
 app.use(`${API}/workspaces/:workspaceId/invitations`,  invitationRoutes);
+app.use(`${API}/invitations`, publicInvitationRoutes);
 app.use(`${API}/workspaces/:workspaceId/members`, membersRoutes);
 
 // ── 404 handler ──────────────────────────────────────────────

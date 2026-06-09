@@ -5,8 +5,9 @@ import {
   LayoutDashboard, Users, FolderOpen, BarChart3, FileText,
   Settings, Kanban, Bell, User, X, Zap,
 } from 'lucide-react'
-import { useAuth } from '../../hooks/useAuth'
+// import { useAuth } from '../../hooks/useAuth'
 import Avatar from '../shared/Avatar'
+import { useAuth } from '../../hooks/AuthContext'
 
 interface SidebarProps {
   isOpen: boolean

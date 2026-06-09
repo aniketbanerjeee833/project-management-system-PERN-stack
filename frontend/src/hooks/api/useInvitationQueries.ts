@@ -5,6 +5,7 @@ import {
   type SendInviteData,
   type AcceptInviteData,
 } from '../../api/invitation.api';
+import { memberKeys } from './useMemberQueries';
 
 // ─── Query keys ───────────────────────────────────────────────────────────────
 
@@ -22,9 +23,8 @@ export const useInvitationQueries = (workspaceId?: number, token?: string) => {
   const validateInvite = useQuery({
     queryKey: invitationKeys.validate(token ?? ''),
     queryFn:  () => invitationApi.validate(token!),
-    enabled:  Boolean(token),
-    retry:    false,
-    staleTime: Infinity,
+    enabled:  Boolean(token), //ensures the query only runs when token exists.
+   
   });
 
   // ── POST /invitations/:token/accept ───────────────────────────────────────
@@ -43,6 +43,8 @@ export const useInvitationQueries = (workspaceId?: number, token?: string) => {
     onSuccess: () => {
       if (workspaceId) {
         qc.invalidateQueries({ queryKey: invitationKeys.all(workspaceId) });
+            qc.invalidateQueries({queryKey: memberKeys.pending(workspaceId),
+    });
       }
     },
   });

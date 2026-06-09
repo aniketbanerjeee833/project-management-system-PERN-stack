@@ -2,11 +2,12 @@ import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, Bell, Sun, Moon, Search, ChevronDown } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../hooks/useAuth'
+
 import { useDarkMode } from '../../hooks/useDarkMode'
 import type { Role } from '../../types'
 import Avatar from '../shared/Avatar'
 import { notifications } from '../../data/mockData'
+import { useAuth } from '../../hooks/AuthContext'
 
 interface NavbarProps {
   onMenuToggle: () => void

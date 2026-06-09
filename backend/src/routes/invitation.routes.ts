@@ -12,8 +12,8 @@ import { authenticate }    from "../middlewares/authenticate";
 //   sendInviteSchema,
 //   acceptInviteSchema,
 // } from "../validators/auth.validator";
-import { sendInvitationController } from "../controllers/invitation/invitation.controller";
-import {  sendInviteSchema } from "../validators/invitation.validator";
+import { acceptInviteController, sendInvitationController, validateInviteController } from "../controllers/invitation/invitation.controller";
+import {  acceptInviteSchema, sendInviteSchema } from "../validators/invitation.validator";
 import { validateRequest } from "../middlewares/validateRequest";
 
 
@@ -35,17 +35,17 @@ router.post(
 // // Called by frontend before showing register/login form
 // // Returns { email, role, workspace_name } so UI can show
 // // "You're joining Acme Corp as Manager"
-// publicInviteRouter.get(
-//   "/:token",
-//   asyncHandler(validateInviteController)
-// );
+router.get(
+  "/:token",
+  asyncHandler(validateInviteController)
+);
 
 // // POST /invitations/:token/accept
 // // Called after user fills register or login form on the invite page
-// publicInviteRouter.post(
-//   "/:token/accept",
-//   validateRequest(acceptInviteSchema),
-//   asyncHandler(acceptInviteController)
-// );
+router.post(
+  "/:token/accept",
+  validateRequest(acceptInviteSchema),
+  asyncHandler(acceptInviteController)
+);
 
 export default router
