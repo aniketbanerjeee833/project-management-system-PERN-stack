@@ -21,7 +21,9 @@ const roleOptions: { role: Role; label: string; name: string; avatar: string }[]
 ]
 
 const Navbar: React.FC<NavbarProps> = ({ onMenuToggle, title }) => {
+
   const { user, role, setRole } = useAuth()
+  console.log(user)
   const { isDark, toggle } = useDarkMode()
   const [showSwitcher, setShowSwitcher] = useState(false)
   const switcherRef = useRef<HTMLDivElement | null>(null)
@@ -125,7 +127,7 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuToggle, title }) => {
             )}
           </button>
 
-          <Avatar initials={user.avatar} size="sm" />
+          <Avatar initials={user?.name. split(" ") .map(word => word[0]) .join("")} size="sm" />
         </div>
       </div>
     </header>

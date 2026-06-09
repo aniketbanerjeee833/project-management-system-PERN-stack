@@ -9,6 +9,7 @@ import invitationRoutes   from "./routes/invitation.routes";
 import publicInvitationRoutes from "./routes/public.invitation.routes";
 import membersRoutes from "./routes/members.routes";
 import authRoutes from "./routes/auth.routes";
+import cookieParser from "cookie-parser";
 
 const app: Application = express();
 
@@ -29,7 +30,7 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cookieParser());
 // ── Health check ─────────────────────────────────────────────
 app.get("/health", (_req: Request, res: Response) => {
   res.status(200).json({ success: true, message: "Server is healthy" });

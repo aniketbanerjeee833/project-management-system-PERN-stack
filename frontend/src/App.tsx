@@ -64,170 +64,352 @@
 //   )
 // }
 // src/App.tsx
+// import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+// // import { AuthProvider, useAuth } from "./context/AuthContext";
+// import { Loader2 } from "lucide-react";
+
+// // Layouts
+// // import DashboardLayout from "./components/layout/DashboardLayout";
+
+// // Auth pages
+// // import LoginPage           from "./pages/auth/LoginPage";
+// // import InvitePage          from "./pages/auth/InvitePage";
+// // import CreateWorkspacePage from "./pages/auth/CreateWorkspacePage";
+// import React from "react";
+// // Admin pages
+// import AdminDashboard  from "./pages/admin/AdminDashboard";
+// import AdminMembers    from "./pages/admin/AdminMembers";
+// import AdminProjects   from "./pages/admin/AdminProjects";
+// import AdminAnalytics  from "./pages/admin/AdminAnalytics";
+// // import AdminReports    from "./pages/admin/AdminReports";
+// // import AdminSettings   from "./pages/admin/AdminSettings";
+
+// // Manager pages
+// import ManagerDashboard from "./pages/manager/ManagerDashboard";
+// import ManagerProjects  from "./pages/manager/ManagerProjects";
+// import KanbanBoard      from "./pages/manager/KanbanBoard";
+// import ManagerTeam      from "./pages/manager/ManagerTeam";
+// import ManagerReports   from "./pages/manager/ManagerReports";
+
+// // Employee pages
+// import EmployeeDashboard from "./pages/employee/EmployeeDashboard";
+// import MyTasks           from "./pages/employee/MyTasks";
+// import Notifications     from "./pages/employee/Notifications";
+// import Profile           from "./pages/employee/Profile";
+// import { AuthProvider, useAuth } from "./hooks/AuthContext";
+// import DashboardLayout from "./app/layouts/DashboardLayout";
+// import LoginPage from "./pages/LoginPage";
+
+// const InvitePage = React.lazy(() => import("./pages/InvitePage"))
+
+// // ─── Role-based home redirect ─────────────────────────────────────────────────
+// // Called at "/" — sends each role to their own dashboard
+// const RoleRedirect: React.FC = () => {
+//   const { role, isAuthenticated, isLoading, needsWorkspace } = useAuth();
+
+//   if (isLoading) return <FullPageSpinner />;
+
+//   if (!isAuthenticated) return <Navigate to="/login" replace />;
+//   if (needsWorkspace)   return <Navigate to="/create-workspace" replace />;
+
+//   if (role === "admin")    return <Navigate to="/admin" replace />;
+//   if (role === "manager")  return <Navigate to="/manager" replace />;
+//   if (role === "employee") return <Navigate to="/employee" replace />;
+
+//   return <Navigate to="/login" replace />;
+// };
+
+// // ─── Guards ───────────────────────────────────────────────────────────────────
+
+// // Redirects to /login if not authenticated
+// const RequireAuth: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+//   const { isAuthenticated, isLoading, needsWorkspace } = useAuth();
+//   if (isLoading)        return <FullPageSpinner />;
+//   // if (!isAuthenticated) return <div>Please Login</div>;
+//   if (!isAuthenticated) return <Navigate to="/login" replace />;
+//   //if(needsWorkspace)   return <div>Please Create Workspace</div>
+//   if (needsWorkspace)   return <Navigate to="/create-workspace" replace />;
+//   return <>{children}</>;
+// };
+
+// // Redirects wrong role away (e.g. employee trying to access /admin)
+// const RequireRole: React.FC<{
+//   allowed: ("admin" | "manager" | "employee")[];
+//   children: React.ReactNode;
+// }> = ({ allowed, children }) => {
+//   const { role } = useAuth();
+//   if (!role)
+//   return <div>Loading Role...</div>;
+
+// // if (!allowed.includes(role))
+// //   return <div>Unauthorized</div>;
+//   if (!role || !allowed.includes(role)) return <Navigate to="/" replace />;
+//   return <>{children}</>;
+// };
+
+// // ─── App ─────────────────────────────────────────────────────────────────────
+
+// function AppRoutes() {
+//   return (
+//     <Routes>
+//       {/* Root → role-based redirect */}
+//       <Route path="/" element={<RoleRedirect />} />
+
+//       {/* Public routes */}
+//       <Route path="/login"  element={<LoginPage/>} />
+//       <Route path="/invite" element={<InvitePage/>} />  
+//       {/* /invite?token=...  */}
+
+//       {/* Fresh admin — has JWT but no workspace yet */}
+//       {/* <Route
+//         path="/create-workspace"
+//         element={
+//           <RequireAuth>
+//             <CreateWorkspacePage />
+//           </RequireAuth>
+//         }
+//       /> */}
+
+//       {/* ── Admin routes ── */}
+//       <Route
+//         element={
+//           <RequireAuth>
+//             <RequireRole allowed={["admin"]}>
+//               <DashboardLayout />
+//             </RequireRole>
+//           </RequireAuth>
+//         }
+//       >
+//         <Route path="/admin"           element={<AdminDashboard />} />
+//         <Route path="/admin/members"   element={<AdminMembers />} />
+//         <Route path="/admin/projects"  element={<AdminProjects />} />
+//         <Route path="/admin/analytics" element={<AdminAnalytics />} />
+//         {/* <Route path="/admin/reports"   element={<AdminReports />} />
+//         <Route path="/admin/settings"  element={<AdminSettings />} /> */}
+//       </Route>
+
+//       {/* ── Manager routes ── */}
+//       <Route
+//         element={
+//           <RequireAuth>
+//             <RequireRole allowed={["manager"]}>
+//               <DashboardLayout />
+//             </RequireRole>
+//           </RequireAuth>
+//         }
+//       >
+//         <Route path="/manager"          element={<ManagerDashboard />} />
+//         <Route path="/manager/projects" element={<ManagerProjects />} />
+//         <Route path="/manager/kanban"   element={<KanbanBoard />} />
+//         <Route path="/manager/team"     element={<ManagerTeam />} />
+//         <Route path="/manager/reports"  element={<ManagerReports />} />
+//       </Route>
+
+//       {/* ── Employee routes ── */}
+//       <Route
+//         element={
+//           <RequireAuth>
+//             <RequireRole allowed={["employee"]}>
+//               <DashboardLayout />
+//             </RequireRole>
+//           </RequireAuth>
+//         }
+//       >
+//         <Route path="/employee"               element={<EmployeeDashboard />} />
+//         <Route path="/employee/tasks"         element={<MyTasks />} />
+//         <Route path="/employee/notifications" element={<Notifications />} />
+//         <Route path="/employee/profile"       element={<Profile />} />
+//       </Route>
+
+//       {/* Fallback */}
+//       <Route path="*" element={<Navigate to="/" replace />} />
+//     </Routes>
+//   );
+// }
+
+// export default function App() {
+//   return (
+//     <AuthProvider>
+//       <BrowserRouter>
+//         <AppRoutes />
+//       </BrowserRouter>
+//     </AuthProvider>
+//   );
+// }
+
+// // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+// const FullPageSpinner: React.FC = () => (
+//   <div className="min-h-screen flex items-center justify-center">
+//     <Loader2 size={28} className="animate-spin text-indigo-500" />
+//   </div>
+// );
+import React, { Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-// import { AuthProvider, useAuth } from "./context/AuthContext";
 import { Loader2 } from "lucide-react";
+import { AuthProvider, useAuth } from "./hooks/AuthContext";
+import DashboardLayout from "./app/layouts/DashboardLayout";
 
-// Layouts
-// import DashboardLayout from "./components/layout/DashboardLayout";
+// ── Auth pages ────────────────────────────────────────────────────────────────
+import LoginPage from "./pages/LoginPage";
+const InvitePage          = React.lazy(() => import("./pages/InvitePage"));
+// const CreateWorkspacePage = React.lazy(() => import("./pages/auth/CreateWorkspacePage"));
 
-// Auth pages
-// import LoginPage           from "./pages/auth/LoginPage";
-// import InvitePage          from "./pages/auth/InvitePage";
-// import CreateWorkspacePage from "./pages/auth/CreateWorkspacePage";
-import React from "react";
-// Admin pages
+// ── Admin pages ───────────────────────────────────────────────────────────────
 import AdminDashboard  from "./pages/admin/AdminDashboard";
 import AdminMembers    from "./pages/admin/AdminMembers";
 import AdminProjects   from "./pages/admin/AdminProjects";
 import AdminAnalytics  from "./pages/admin/AdminAnalytics";
-// import AdminReports    from "./pages/admin/AdminReports";
-// import AdminSettings   from "./pages/admin/AdminSettings";
 
-// Manager pages
+// ── Manager pages ─────────────────────────────────────────────────────────────
 import ManagerDashboard from "./pages/manager/ManagerDashboard";
 import ManagerProjects  from "./pages/manager/ManagerProjects";
 import KanbanBoard      from "./pages/manager/KanbanBoard";
 import ManagerTeam      from "./pages/manager/ManagerTeam";
 import ManagerReports   from "./pages/manager/ManagerReports";
 
-// Employee pages
+// ── Employee pages ────────────────────────────────────────────────────────────
 import EmployeeDashboard from "./pages/employee/EmployeeDashboard";
 import MyTasks           from "./pages/employee/MyTasks";
 import Notifications     from "./pages/employee/Notifications";
 import Profile           from "./pages/employee/Profile";
-import { AuthProvider, useAuth } from "./hooks/AuthContext";
-import DashboardLayout from "./app/layouts/DashboardLayout";
 
-const InvitePage = React.lazy(() => import("./pages/InvitePage"))
+// ─── Full page spinner ────────────────────────────────────────────────────────
+const FullPageSpinner: React.FC = () => (
+  <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
+    <Loader2 size={28} className="animate-spin text-indigo-500" />
+  </div>
+);
 
-// ─── Role-based home redirect ─────────────────────────────────────────────────
-// Called at "/" — sends each role to their own dashboard
+// ─── Role redirect ────────────────────────────────────────────────────────────
+// Sits at "/" — reads auth state and sends each role to their home
 const RoleRedirect: React.FC = () => {
   const { role, isAuthenticated, isLoading, needsWorkspace } = useAuth();
 
-  if (isLoading) return <FullPageSpinner />;
-
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (isLoading)        return <FullPageSpinner />;
+  if (!isAuthenticated) return <Navigate to="/login"            replace />;
   if (needsWorkspace)   return <Navigate to="/create-workspace" replace />;
-
-  if (role === "admin")    return <Navigate to="/admin" replace />;
-  if (role === "manager")  return <Navigate to="/manager" replace />;
+  if (role === "admin")    return <Navigate to="/admin"    replace />;
+  if (role === "manager")  return <Navigate to="/manager"  replace />;
   if (role === "employee") return <Navigate to="/employee" replace />;
 
+  // fallback — authenticated but role unknown (should not happen)
   return <Navigate to="/login" replace />;
 };
 
-// ─── Guards ───────────────────────────────────────────────────────────────────
-
-// Redirects to /login if not authenticated
+// ─── RequireAuth ──────────────────────────────────────────────────────────────
 const RequireAuth: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, isLoading, needsWorkspace } = useAuth();
+
   if (isLoading)        return <FullPageSpinner />;
-  if (!isAuthenticated)
-  return <div>Please Login</div>;
-  // if (!isAuthenticated) return <Navigate to="/login" replace />;
-  if(needsWorkspace)   return <div>Please Create Workspace</div>
-  // if (needsWorkspace)   return <Navigate to="/create-workspace" replace />;
+  if (!isAuthenticated) return <Navigate to="/login"            replace />;
+  if (needsWorkspace)   return <Navigate to="/create-workspace" replace />;
+
   return <>{children}</>;
 };
 
-// Redirects wrong role away (e.g. employee trying to access /admin)
+// ─── RequireRole ──────────────────────────────────────────────────────────────
 const RequireRole: React.FC<{
   allowed: ("admin" | "manager" | "employee")[];
   children: React.ReactNode;
 }> = ({ allowed, children }) => {
-  const { role } = useAuth();
-  if (!role)
-  return <div>Loading Role...</div>;
+  const { role, isLoading } = useAuth();
 
-if (!allowed.includes(role))
-  return <div>Unauthorized</div>;
-  // if (!role || !allowed.includes(role)) return <Navigate to="/" replace />;
+  // still loading — don't redirect yet, wait for role to resolve
+  if (isLoading || !role) return <FullPageSpinner />;
+
+  // wrong role — send back to root, RoleRedirect handles the rest
+  if (!allowed.includes(role)) return <Navigate to="/" replace />;
+
   return <>{children}</>;
 };
 
-// ─── App ─────────────────────────────────────────────────────────────────────
-
+// ─── Routes ───────────────────────────────────────────────────────────────────
 function AppRoutes() {
   return (
-    <Routes>
-      {/* Root → role-based redirect */}
-      <Route path="/" element={<RoleRedirect />} />
+    // Suspense required for React.lazy — without this lazy imports crash
+    <Suspense fallback={<FullPageSpinner />}>
+      <Routes>
 
-      {/* Public routes */}
-      {/* <Route path="/login"  element={<LoginPage />} />*/
-      }
-      <Route path="/invite" element={<InvitePage/>} />  
-      {/* /invite?token=...  */}
+        {/* Root — redirects by role */}
+        <Route path="/" element={<RoleRedirect />} />
 
-      {/* Fresh admin — has JWT but no workspace yet */}
-      {/* <Route
-        path="/create-workspace"
-        element={
-          <RequireAuth>
-            <CreateWorkspacePage />
-          </RequireAuth>
-        }
-      /> */}
+        {/* ── Public ── */}
+        <Route path="/login"  element={<LoginPage />} />
+        <Route path="/invite" element={<InvitePage />} />
 
-      {/* ── Admin routes ── */}
-      <Route
-        element={
-          <RequireAuth>
-            <RequireRole allowed={["admin"]}>
-              <DashboardLayout />
-            </RequireRole>
-          </RequireAuth>
-        }
-      >
-        <Route path="/admin"           element={<AdminDashboard />} />
-        <Route path="/admin/members"   element={<AdminMembers />} />
-        <Route path="/admin/projects"  element={<AdminProjects />} />
-        <Route path="/admin/analytics" element={<AdminAnalytics />} />
-        {/* <Route path="/admin/reports"   element={<AdminReports />} />
-        <Route path="/admin/settings"  element={<AdminSettings />} /> */}
-      </Route>
+        {/* ── Fresh admin — session exists but no workspace yet ── */}
+        {/* <Route
+          path="/create-workspace"
+          element={
+            <RequireAuth>
+              <CreateWorkspacePage />
+            </RequireAuth>
+          }
+        /> */}
 
-      {/* ── Manager routes ── */}
-      <Route
-        element={
-          <RequireAuth>
-            <RequireRole allowed={["manager"]}>
-              <DashboardLayout />
-            </RequireRole>
-          </RequireAuth>
-        }
-      >
-        <Route path="/manager"          element={<ManagerDashboard />} />
-        <Route path="/manager/projects" element={<ManagerProjects />} />
-        <Route path="/manager/kanban"   element={<KanbanBoard />} />
-        <Route path="/manager/team"     element={<ManagerTeam />} />
-        <Route path="/manager/reports"  element={<ManagerReports />} />
-      </Route>
+        {/* ── Admin ── */}
+        <Route
+          element={
+            <RequireAuth>
+              <RequireRole allowed={["admin"]}>
+                <DashboardLayout />
+              </RequireRole>
+            </RequireAuth>
+          }
+        >
+          <Route path="/admin"           element={<AdminDashboard />} />
+          <Route path="/admin/members"   element={<AdminMembers />} />
+          <Route path="/admin/projects"  element={<AdminProjects />} />
+          <Route path="/admin/analytics" element={<AdminAnalytics />} />
+        </Route>
 
-      {/* ── Employee routes ── */}
-      <Route
-        element={
-          <RequireAuth>
-            <RequireRole allowed={["employee"]}>
-              <DashboardLayout />
-            </RequireRole>
-          </RequireAuth>
-        }
-      >
-        <Route path="/employee"               element={<EmployeeDashboard />} />
-        <Route path="/employee/tasks"         element={<MyTasks />} />
-        <Route path="/employee/notifications" element={<Notifications />} />
-        <Route path="/employee/profile"       element={<Profile />} />
-      </Route>
+        {/* ── Manager ── */}
+        <Route
+          element={
+            <RequireAuth>
+              <RequireRole allowed={["manager"]}>
+                <DashboardLayout />
+              </RequireRole>
+            </RequireAuth>
+          }
+        >
+          <Route path="/manager"          element={<ManagerDashboard />} />
+          <Route path="/manager/projects" element={<ManagerProjects />} />
+          <Route path="/manager/kanban"   element={<KanbanBoard />} />
+          <Route path="/manager/team"     element={<ManagerTeam />} />
+          <Route path="/manager/reports"  element={<ManagerReports />} />
+        </Route>
 
-      {/* Fallback */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        {/* ── Employee ── */}
+        <Route
+          element={
+            <RequireAuth>
+              <RequireRole allowed={["employee"]}>
+                <DashboardLayout />
+              </RequireRole>
+            </RequireAuth>
+          }
+        >
+          <Route path="/employee"               element={<EmployeeDashboard />} />
+          <Route path="/employee/tasks"         element={<MyTasks />} />
+          <Route path="/employee/notifications" element={<Notifications />} />
+          <Route path="/employee/profile"       element={<Profile />} />
+        </Route>
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+
+      </Routes>
+    </Suspense>
   );
 }
 
+// ─── App ──────────────────────────────────────────────────────────────────────
+// Order matters:
+// AuthProvider → BrowserRouter → AppRoutes
+// AuthProvider must wrap BrowserRouter so useAuth works everywhere including
+// components that also use useNavigate
 export default function App() {
   return (
     <AuthProvider>
@@ -237,11 +419,3 @@ export default function App() {
     </AuthProvider>
   );
 }
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-const FullPageSpinner: React.FC = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <Loader2 size={28} className="animate-spin text-indigo-500" />
-  </div>
-);

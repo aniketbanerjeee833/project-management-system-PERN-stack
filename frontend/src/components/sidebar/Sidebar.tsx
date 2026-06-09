@@ -102,10 +102,11 @@ const SidebarContent: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
       {/* User */}
       <div className="p-3 border-t border-slate-200/60 dark:border-slate-700/60">
         <div className="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer transition-colors">
-          <Avatar initials={user.avatar} size="sm" />
+          <Avatar initials={user?.name. split(" ") .map(word => word[0]) .join("")} size="sm" />
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">{user.name}</p>
-            <p className="text-[10px] text-slate-400 truncate">{user.email}</p>
+            <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
+              {user?.name}</p>
+            <p className="text-[10px] text-slate-400 truncate">{user?.email}</p>
           </div>
           <div className="w-2 h-2 bg-emerald-400 rounded-full flex-shrink-0" />
         </div>

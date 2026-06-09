@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { Eye, EyeOff, Loader2, LogIn } from "lucide-react";
 
 import { useAuth } from "../hooks/AuthContext";
+import { useAuthQueries } from "../hooks/api/useAuthQueries";
 // ─── Zod schema ───────────────────────────────────────────────────────────────
 
 const loginSchema = z.object({
@@ -32,7 +33,7 @@ const LoginPage: React.FC = () => {
   const { setAuth, isAuthenticated, role, isLoading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [serverError,  setServerError]  = useState("");
-
+    const { login } = useAuthQueries();
   const {
     register,
     handleSubmit,
@@ -49,7 +50,8 @@ const LoginPage: React.FC = () => {
   const onSubmit = async (values: LoginForm) => {
     setServerError("");
     try {
-      const result = await authApi.login(values);
+      const result = await login.mutateAsync(values);
+      console.log(result);
       // Cookie already set by backend — update React state
       setAuth(result.user, result.workspace, result.role);
 

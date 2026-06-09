@@ -60,6 +60,8 @@ export async function loginController(
   // Don't send token in body — only user + needsWorkspace flag
   successResponse(res, {
     user:           result.user,
+    workspace:result.workspace,
+    role:           result.role,
     needsWorkspace: result.needsWorkspace,
   }, "Logged in successfully.");
 }

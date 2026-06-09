@@ -132,13 +132,13 @@ export async function findUserByEmail(email: string): Promise<UserRow | null> {
   return rows[0] ?? null;
 }
 
-// export async function findUserById(id: number): Promise<UserRow | null> {
-//   const { rows } = await pool.query<UserRow>(
-//     `SELECT * FROM users WHERE id = $1 LIMIT 1`,
-//     [id]
-//   );
-//   return rows[0] ?? null;
-// }
+export async function findUserById(id: number): Promise<UserRow | null> {
+  const { rows } = await pool.query<UserRow>(
+    `SELECT * FROM users WHERE id = $1 LIMIT 1`,
+    [id]
+  );
+  return rows[0] ?? null;
+}
 export async function findMeByUserId(user_id: number): Promise<MeRow | null> {
   const { rows } = await pool.query<MeRow>(
     `SELECT
