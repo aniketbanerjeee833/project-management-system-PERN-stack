@@ -6,13 +6,16 @@ import ProjectCard from '../../components/cards/ProjectCard';
 
 import ProjectModal, { type Manager, type ProjectFormData } from '../../components/modal/ProjectModal';
 import { useProjectQueries } from '../../hooks/api/useProjectQueries';
+import { useAuth } from '../../hooks/AuthContext';
+import { useMemberQueries } from '../../hooks/api/useMemberQueries';
+// import { useMemberQueries } from '../../hooks/api/useMemberQueries';
 
 // ─── Mock managers (replace with real API call) ───────────────────────────────
-const MOCK_MANAGERS : Manager[] = [
-  { id: 1, name: 'Priya Sharma' },
-  { id: 2, name: 'Vikram Nair' },
-];
-const workspaceId = 1; // from params/context
+// const MOCK_MANAGERS : Manager[] = [
+//   { id: 1, name: 'Priya Sharma' },
+//   { id: 2, name: 'Vikram Nair' },
+// ];
+//const workspaceId = 1; // from params/context
 
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -33,7 +36,13 @@ interface ProjectForEdit {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 const AdminProjects: React.FC = () => {
-
+   const { workspace } = useAuth()
+      const workspaceId= Number(workspace?.id)
+      console.log(workspaceId);
+        const { managers} =useMemberQueries(workspaceId);
+        console.log(managers.data,"managers");
+        const MOCK_MANAGERS =managers.data ?? [];
+        
   const [filter, setFilter] = useState<FilterStatus>('all');
   const [search, setSearch] = useState('');
 

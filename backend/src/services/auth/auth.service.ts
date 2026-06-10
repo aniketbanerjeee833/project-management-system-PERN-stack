@@ -206,7 +206,7 @@ export async function loginService(email: string, password: string) {
   const valid = await bcrypt.compare(password, user.password_hash);
   if (!valid) throw new AppError("Invalid email or password.", 401);
   const me = await findMeByUserId(user.id);
-  if(!me) throw new AppError("User registered but hasn't created/joined a workspace yet.", 401);
+  // if(!me) throw new AppError("User registered but hasn't created/joined a workspace yet.", 401);
   const token = signToken(user.id);
   return {
     user: safeUser(user),

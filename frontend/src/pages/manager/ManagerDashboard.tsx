@@ -7,6 +7,7 @@ import ChartCard from '../../components/charts/ChartCard';
 import ProjectCard from '../../components/cards/ProjectCard';
 import { projects, tasks, teamMembers, analytics } from '../../data/mockData';
 import { getDaysUntil } from '../../utils';
+import { useAuth } from '../../hooks/AuthContext';
 
 interface ChartTooltipProps {
   active?: boolean
@@ -33,10 +34,13 @@ const upcomingDeadlines = tasks.filter(t => {
   return d >= 0 && d <= 7;
 }).slice(0, 4);
 
-const ManagerDashboard: React.FC = () => (
+const ManagerDashboard: React.FC = () => {
+  const { user } = useAuth()
+    console.log(user)
+  return(
   <div className="space-y-6">
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      <h2 className="text-xl font-bold text-slate-900 dark:text-white">Good morning, Priya 👋</h2>
+      <h2 className="text-xl font-bold text-slate-900 dark:text-white">Welcome, {user?.name} 👋</h2>
       <p className="text-sm text-slate-500 dark:text-slate-400">Manage your projects and team efficiently.</p>
     </motion.div>
 
@@ -97,6 +101,7 @@ const ManagerDashboard: React.FC = () => (
       </div>
     </div>
   </div>
-);
+  )
+};
 
 export default ManagerDashboard;

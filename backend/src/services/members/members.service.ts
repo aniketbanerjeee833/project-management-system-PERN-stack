@@ -4,6 +4,7 @@ import {
   findPendingInvitesByWorkspace,
   deleteMember,
   updateMemberRole,
+  findManagersByWorkspace,
 } from "../../repositories/members/members.repository";
 
 // GET all members of a workspace
@@ -26,6 +27,17 @@ export async function removeMemberService(
     throw new Error("You cannot remove yourself from the workspace.");
   }
   await deleteMember(workspace_id, user_id);
+}
+
+export async function getWorkspaceManagersService(workspace_id: number) {
+  return findManagersByWorkspace(workspace_id);
+  // const { rows } = await pool.query(
+  //   `SELECT user_id
+  //    FROM workspace_members
+  //    WHERE workspace_id = $1 AND role = 'manager'`,
+  //   [workspace_id]
+  // );
+  // return rows.map((row) => row.user_id);
 }
 
 // PATCH change role — cannot change an admin's role

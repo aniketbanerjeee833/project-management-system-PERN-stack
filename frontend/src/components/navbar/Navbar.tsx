@@ -56,9 +56,9 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuToggle, title }) => {
           <Menu size={18} />
         </button>
 
-        <h1 className="font-semibold text-slate-900 dark:text-white text-sm hidden sm:block">{title}</h1>
+        {/* <h1 className="font-semibold text-slate-900 dark:text-white text-sm hidden sm:block">{title}</h1> */}
 
-        <div className="flex-1 max-w-xs mx-4 hidden md:block">
+        {/* <div className="flex-1 max-w-xs mx-4 hidden md:block">
           <div className="relative">
             <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
@@ -67,7 +67,7 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuToggle, title }) => {
               className="w-full pl-9 pr-4 py-2 text-sm bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 placeholder-slate-400 rounded-xl border border-transparent focus:border-indigo-300 dark:focus:border-indigo-600 focus:bg-white dark:focus:bg-slate-700 outline-none transition-all"
             />
           </div>
-        </div>
+        </div> */}
 
         <div className="ml-auto flex items-center gap-2">
           {/* Role Switcher */}
@@ -127,7 +127,7 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuToggle, title }) => {
             )}
           </button>
 
-          <Avatar initials={user?.name. split(" ") .map(word => word[0]) .join("")} size="sm" />
+          <Avatar initials={user?.name. split(" ") .map(word => word[0].toLocaleUpperCase()) .join("")} size="sm" />
         </div>
       </div>
     </header>

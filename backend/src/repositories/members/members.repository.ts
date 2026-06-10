@@ -47,7 +47,25 @@ export async function findMembersByWorkspace(
   );
   return rows;
 }
+export async function findManagersByWorkspace(workspace_id: number) {
+  const { rows } = await pool.query(
+    `SELECT
+       wm.id AS member_id,
+       wm.role,
+       u.id AS user_id,
+       u.name,
+       u.email,
+       u.avatar_url
+     FROM workspace_members wm
+     JOIN users u ON u.id = wm.user_id
+     WHERE wm.workspace_id = $1
+       AND wm.role = 'manager'
+     ORDER BY wm.joined_at ASC`,
+    [workspace_id]
+  );
 
+  return rows;
+}
 // All pending (not yet accepted) invitations for a workspace
 export async function findPendingInvitesByWorkspace(
   workspace_id: number

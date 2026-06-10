@@ -7,6 +7,7 @@ import ChartCard from '../../components/charts/ChartCard';
 
 import { workspaceStats, analytics, recentActivities } from '../../data/mockData';
 import { formatCurrency } from '../../utils';
+import { useAuth } from '../../hooks/AuthContext';
 
 interface ChartTooltipProps {
   active?: boolean
@@ -30,13 +31,14 @@ const CustomTooltip = ({ active, payload, label }: ChartTooltipProps) => {
 
 const AdminDashboard: React.FC = () => {
   const activityTypeIcon: Record<string, string> = { project: '📁', task: '✅', member: '👤' };
-
+    const { user } = useAuth()
+      console.log(user)
   return (
     <div className="space-y-6">
       {/* Welcome */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white">Good morning, Rahul 👋</h2>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">Welcome, {user?.name} 👋</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Here's what's happening in your workspace today.</p>
         </div>
         <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-indigo-50 dark:bg-indigo-500/15 rounded-xl">

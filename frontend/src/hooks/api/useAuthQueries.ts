@@ -4,6 +4,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { authApi } from "../../api/auth.api";
 import type { Role } from "../../types";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../AuthContext";
 // import { useAuth } from "../AuthContext";
 
 // ─── Query keys ───────────────────────────────────────────────────────────────
@@ -24,8 +26,8 @@ const ROLE_HOME: Record<Role, string> = {
 
 export const useAuthQueries = () => {
   const qc       = useQueryClient();
-//   const navigate = useNavigate();
-//   const { setAuth, logout: ctxLogout } = useAuth();
+  const navigate = useNavigate();
+  const { setAuth, logout: ctxLogout } = useAuth();
 
   // ── GET /auth/me ────────────────────────────────────────────────────────────
   // Used to restore session on app load.
@@ -69,25 +71,25 @@ export const useAuthQueries = () => {
   // ── POST /auth/create-workspace ─────────────────────────────────────────────
   const createWorkspace = useMutation({
     mutationFn: authApi.createWorkspace,
-    // onSuccess: async () => {
-    //   // Refetch /auth/me to get workspace + role into context
-    //   const fresh = await authApi.me();
-    //   if (!fresh.needsWorkspace && fresh.user && fresh.workspace && fresh.role) {
-    //     setAuth(fresh.user, fresh.workspace, fresh.role);
-    //     navigate(ROLE_HOME[fresh.role], { replace: true });
-    //   }
-    //   qc.invalidateQueries({ queryKey: authKeys.me });
-    // },
+    onSuccess: async () => {
+      // Refetch /auth/me to get workspace + role into context
+      const fresh = await authApi.me();
+      if (!fresh.needsWorkspace && fresh.user && fresh.workspace && fresh.role) {
+        setAuth(fresh.user, fresh.workspace, fresh.role);
+        navigate(ROLE_HOME[fresh.role], { replace: true });
+      }
+      qc.invalidateQueries({ queryKey: authKeys.me });
+    },
   });
 
   // ── POST /auth/logout ────────────────────────────────────────────────────────
   const logout = useMutation({
     mutationFn: authApi.logout,
-    // onSuccess: () => {
-    //   ctxLogout();
-    //   qc.clear();                          // clear all cached queries
-    //   navigate("/login", { replace: true });
-    // },
+    onSuccess: () => {
+      ctxLogout();
+      qc.clear();                          // clear all cached queries
+      navigate("/login", { replace: true });
+    },
   });
 
   return {

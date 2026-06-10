@@ -7,6 +7,7 @@ import {
   getPendingInvitesService,
   removeMemberService,
   changeMemberRoleService,
+  getWorkspaceManagersService,
 } from "../../services/members/members.service";
 
 // ── GET /workspaces/:workspaceId/members ──────────────────────────────────────
@@ -17,8 +18,20 @@ export async function getMembersController(
   const workspace_id = Number(req.params.workspaceId);
 
   const members = await getMembersService(workspace_id);
-
+  // console.log(members);
   successResponse(res, members, "Members fetched successfully.");
+}
+
+export async function getWorkspaceManagersController(
+  req: AuthRequest,
+  res: Response
+): Promise<void> {
+  const workspace_id = Number(req.params.workspaceId);
+  // console.log(workspace_id);
+
+ const workspaceManagers=await getWorkspaceManagersService(workspace_id);
+// console.log(workspaceManagers);
+  successResponse(res, workspaceManagers, "Workspace managers fetched successfully.");
 }
 
 // ── GET /workspaces/:workspaceId/members/pending ──────────────────────────────

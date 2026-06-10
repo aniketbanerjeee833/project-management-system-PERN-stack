@@ -556,22 +556,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // The old version was a plain async function defined in the component body.
   // Every render created a new function reference → context value changed
   // → all consumers re-rendered → called logout again → infinite loop.
-  const logout = useCallback(async (): Promise<void> => {
-    try {
-      await api.post("/auth/logout");
-    } catch {
-      // ignore — clear local state regardless
-    }
-    setUser(null);
-    setWorkspace(null);
-    setRole(null);
-    setIsAuthenticated(false);
-    setNeedsWorkspace(false);
-  }, []);
+  const logout = useCallback(() => {
+  setUser(null);
+  setWorkspace(null);
+  setRole(null);
+  setIsAuthenticated(false);
+  setNeedsWorkspace(false);
+}, []);
+  // const logout = useCallback(async (): Promise<void> => {
+  //   try {
+  //     await api.post("/auth/logout");
+  //   } catch {
+  //     // ignore — clear local state regardless
+  //   }
+  //   setUser(null);
+  //   setWorkspace(null);
+  //   setRole(null);
+  //   setIsAuthenticated(false);
+  //   setNeedsWorkspace(false);
+  // }, []);
 
   return (
     <AuthContext.Provider value={{
-      user, workspace, role,
+      user, workspace, role,setRole,
       isLoading, isAuthenticated, needsWorkspace,
       setAuth, logout, refetch: fetchMe,
     }}>

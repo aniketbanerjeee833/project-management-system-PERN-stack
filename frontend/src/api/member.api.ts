@@ -31,6 +31,10 @@ export const memberApi = {
     const { data } = await api.get(`/workspaces/${workspaceId}/members`);
     return data.data;
   },
+  getAllManagers: async (workspaceId: number): Promise<Member[]> => {
+    const { data } = await api.get(`/workspaces/${workspaceId}/members/managers`);
+    return data.data;
+  },
 
   // GET /workspaces/:workspaceId/members/pending
   getPending: async (workspaceId: number): Promise<PendingInvite[]> => {

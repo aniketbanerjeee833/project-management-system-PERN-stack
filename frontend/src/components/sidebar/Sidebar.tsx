@@ -1,65 +1,91 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+// src/components/shared/Sidebar.tsx
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Users, FolderOpen, BarChart3, FileText,
-  Settings, Kanban, Bell, User, X, Zap,
-} from 'lucide-react'
-// import { useAuth } from '../../hooks/useAuth'
-import Avatar from '../shared/Avatar'
-import { useAuth } from '../../hooks/AuthContext'
+  Settings, Kanban, Bell, User, X, Zap, LogOut,
+} from 'lucide-react';
+import Avatar from '../shared/Avatar';
+import { useAuth } from '../../hooks/AuthContext';
+import { useAuthQueries } from '../../hooks/api/useAuthQueries';
 
 interface SidebarProps {
-  isOpen: boolean
-  onClose: () => void
+  isOpen:  boolean;
+  onClose: () => void;
 }
 
-const navByRole = {
+// ── Nav definitions — slug injected at render time ────────────────────────────
+const buildNav = (slug: string) => ({
   admin: [
-    { to: '/admin',            icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/admin/members',    icon: Users,           label: 'Members'   },
-    { to: '/admin/projects',   icon: FolderOpen,      label: 'Projects'  },
-    { to: '/admin/analytics',  icon: BarChart3,       label: 'Analytics' },
-    { to: '/admin/reports',    icon: FileText,        label: 'Reports'   },
-    { to: '/admin/settings',   icon: Settings,        label: 'Settings'  },
+    { to: `/${slug}/admin`,           icon: LayoutDashboard, label: 'Dashboard' },
+    { to: `/${slug}/admin/members`,   icon: Users,           label: 'Members'   },
+    { to: `/${slug}/admin/projects`,  icon: FolderOpen,      label: 'Projects'  },
+    { to: `/${slug}/admin/analytics`, icon: BarChart3,       label: 'Analytics' },
+    { to: `/${slug}/admin/reports`,   icon: FileText,        label: 'Reports'   },
+    { to: `/${slug}/admin/settings`,  icon: Settings,        label: 'Settings'  },
   ],
   manager: [
-    { to: '/manager',           icon: LayoutDashboard, label: 'Dashboard'    },
-    { to: '/manager/projects',  icon: FolderOpen,      label: 'Projects'     },
-    { to: '/manager/kanban',    icon: Kanban,          label: 'Kanban Board' },
-    { to: '/manager/team',      icon: Users,           label: 'Team'         },
-    { to: '/manager/reports',   icon: FileText,        label: 'Reports'      },
+    { to: `/${slug}/manager`,          icon: LayoutDashboard, label: 'Dashboard'    },
+    { to: `/${slug}/manager/projects`, icon: FolderOpen,      label: 'Projects'     },
+    { to: `/${slug}/manager/kanban`,   icon: Kanban,          label: 'Kanban Board' },
+    { to: `/${slug}/manager/team`,     icon: Users,           label: 'Team'         },
+    { to: `/${slug}/manager/reports`,  icon: FileText,        label: 'Reports'      },
   ],
   employee: [
-    { to: '/employee',                icon: LayoutDashboard, label: 'Dashboard'     },
-    { to: '/employee/tasks',          icon: FolderOpen,      label: 'My Tasks'      },
-    { to: '/employee/notifications',  icon: Bell,            label: 'Notifications' },
-    { to: '/employee/profile',        icon: User,            label: 'Profile'       },
+    { to: `/${slug}/employee`,               icon: LayoutDashboard, label: 'Dashboard'     },
+    { to: `/${slug}/employee/tasks`,         icon: FolderOpen,      label: 'My Tasks'      },
+    { to: `/${slug}/employee/notifications`, icon: Bell,            label: 'Notifications' },
+    { to: `/${slug}/employee/profile`,       icon: User,            label: 'Profile'       },
   ],
-}
+});
 
 const roleLabel = {
   admin:    '⚙ Admin View',
   manager:  '📋 Manager View',
   employee: '👤 Employee View',
-}
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 const SidebarContent: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
-  const { user, role } = useAuth()
-  const nav = navByRole[role]
+  const { user, role, workspace } = useAuth();
+   const { logout } = useAuthQueries();
+
+  // Fallback slug while workspace is loading
+  const slug = workspace?.slug ?? '';
+  const nav  = role ? buildNav(slug)[role] : [];
+
+  const initials = user?.name
+    .split(' ')
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase() ?? '?';
 
   return (
     <div className="flex flex-col h-full">
-      {/* Logo */}
+
+      {/* Logo + workspace name */}
       <div className="flex items-center justify-between px-4 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/25">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/25 flex-shrink-0">
             <Zap size={15} className="text-white" />
           </div>
-          <span className="font-bold text-slate-900 dark:text-white tracking-tight">WorkSpace</span>
+          <div className="min-w-0">
+            <p className="font-bold text-slate-900 dark:text-white tracking-tight truncate leading-tight">
+              {workspace?.name ?? 'WorkSpace'}
+            </p>
+            {/* slug shown as subdued URL hint */}
+            <p className="text-[10px] text-slate-400 truncate leading-tight">
+              /{slug}
+            </p>
+          </div>
         </div>
         {onClose && (
-          <button onClick={onClose} className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg lg:hidden">
+          <button
+            onClick={onClose}
+            className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg lg:hidden flex-shrink-0"
+          >
             <X size={15} className="text-slate-500" />
           </button>
         )}
@@ -68,7 +94,7 @@ const SidebarContent: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
       {/* Role label */}
       <div className="px-4 pt-4 pb-1">
         <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
-          {roleLabel[role]}
+          {role ? roleLabel[role] : ''}
         </span>
       </div>
 
@@ -78,7 +104,7 @@ const SidebarContent: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
           <NavLink
             key={to}
             to={to}
-            end={to.split('/').length === 2}
+            end={to.split('/').length === 3}   // exact match for root role pages
             onClick={onClose}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
@@ -99,21 +125,39 @@ const SidebarContent: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
         ))}
       </nav>
 
-      {/* User */}
-      <div className="p-3 border-t border-slate-200/60 dark:border-slate-700/60">
+      {/* User + logout */}
+      <div className="p-3 border-t border-slate-200/60 dark:border-slate-700/60 space-y-1">
         <div className="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer transition-colors">
-          <Avatar initials={user?.name. split(" ") .map(word => word[0]) .join("")} size="sm" />
+          <Avatar initials={initials} size="sm" />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
-              {user?.name}</p>
+              {user?.name}
+            </p>
             <p className="text-[10px] text-slate-400 truncate">{user?.email}</p>
           </div>
           <div className="w-2 h-2 bg-emerald-400 rounded-full flex-shrink-0" />
         </div>
+
+        {/* Logout button */}
+        <button
+          onClick={() => logout.mutate()}
+          disabled={logout.isPending}
+          className="w-full cursor-pointer
+           flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-500 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-500 transition-colors"
+        >
+          <LogOut size={15} />
+          <span>
+           
+            {logout.isPending ? 'Signing out…' : 'Sign out'}
+            </span>
+        </button>
       </div>
+
     </div>
-  )
-}
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => (
   <>
@@ -142,6 +186,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => (
       )}
     </AnimatePresence>
   </>
-)
+);
 
-export default Sidebar
+export default Sidebar;

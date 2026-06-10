@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Loader2, LogIn } from "lucide-react";
 
@@ -12,7 +12,7 @@ import { useAuthQueries } from "../hooks/api/useAuthQueries";
 // ─── Zod schema ───────────────────────────────────────────────────────────────
 
 const loginSchema = z.object({
-  email:    z.string().email("Enter a valid email"),
+  email: z.string().email("Enter a valid email"),
   password: z.string().min(1, "Password is required"),
 });
 
@@ -21,8 +21,8 @@ type LoginForm = z.infer<typeof loginSchema>;
 // ─── Role → route map ─────────────────────────────────────────────────────────
 
 const ROLE_HOME = {
-  admin:    "/admin",
-  manager:  "/manager",
+  admin: "/admin",
+  manager: "/manager",
   employee: "/employee",
 } as const;
 
@@ -32,8 +32,8 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const { setAuth, isAuthenticated, role, isLoading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const [serverError,  setServerError]  = useState("");
-    const { login } = useAuthQueries();
+  const [serverError, setServerError] = useState("");
+  const { login } = useAuthQueries();
   const {
     register,
     handleSubmit,
@@ -65,6 +65,7 @@ const LoginPage: React.FC = () => {
       navigate(home, { replace: true });
 
     } catch (err: unknown) {
+      console.log(err)
       if (err instanceof Error) {
         setServerError(err.message);
       } else {
@@ -76,10 +77,9 @@ const LoginPage: React.FC = () => {
   const inputCls = (hasError: boolean) =>
     `w-full rounded-xl border px-3 py-2.5 text-sm bg-white dark:bg-slate-800 
      text-slate-800 dark:text-slate-200 outline-none transition-colors
-     disabled:opacity-50 ${
-      hasError
-        ? "border-red-400 dark:border-red-500 focus:border-red-400"
-        : "border-slate-200 dark:border-slate-700 focus:border-indigo-400 dark:focus:border-indigo-500"
+     disabled:opacity-50 ${hasError
+      ? "border-red-400 dark:border-red-500 focus:border-red-400"
+      : "border-slate-200 dark:border-slate-700 focus:border-indigo-400 dark:focus:border-indigo-500"
     }`;
 
   return (
@@ -183,9 +183,22 @@ const LoginPage: React.FC = () => {
         </div>
 
         {/* Footer note */}
-        <p className="text-center text-xs text-slate-400 mt-4">
+        {/* Footer note — replace the existing one */}
+        <div className="text-center text-xs text-slate-400 mt-4 space-y-1">
+          <p>
+            New admin ?{" "}
+            <Link
+              to="/register"
+              className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium"
+            >
+              Create an account for your workspace
+            </Link>
+          </p>
+          <p>Invited by your admin? Check your email for the invite link.</p>
+        </div>
+        {/* <p className="text-center text-xs text-slate-400 mt-4">
           Don't have an account? Ask your workspace admin to invite you.
-        </p>
+        </p> */}
       </motion.div>
     </div>
   );

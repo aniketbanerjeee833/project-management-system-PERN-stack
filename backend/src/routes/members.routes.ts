@@ -7,6 +7,7 @@ import {
   getPendingInvitesController,
   removeMemberController,
   changeMemberRoleController,
+  getWorkspaceManagersController,
 } from "../controllers/members/members.controller";
 
 const router = Router({ mergeParams: true });
@@ -14,6 +15,8 @@ const router = Router({ mergeParams: true });
 
 // GET  /workspaces/:workspaceId/members
 router.get(  "/",                   authenticate, asyncHandler(getMembersController));
+
+router.get("/managers",  authenticate,asyncHandler(getWorkspaceManagersController));
 
 // GET  /workspaces/:workspaceId/members/pending
 router.get(  "/pending",            authenticate, asyncHandler(getPendingInvitesController));

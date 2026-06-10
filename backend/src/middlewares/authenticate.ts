@@ -93,3 +93,32 @@ export async function authenticate(
     res.status(401).json({ success: false, message: "Invalid session." });
   }
 }
+
+// export async function adminAuthenticate(
+//   req: AuthRequest,
+//   res: Response,
+//   next: NextFunction
+// ): Promise<void> {
+//   const token = req.cookies?.token as string | undefined;
+
+//   if (!token) {
+//     res.status(401).json({ success: false, message: "Not authenticated." });
+//     return;
+//   }
+
+//   try {
+//     const payload = jwt.verify(token, process.env.JWT_SECRET!) as { id: number };
+
+//     const user = await verifyAdmin(payload.id);
+//     if (!user) {
+//       res.status(401).json({ success: false, message: "Only Admins are allowed.." });
+//       return;
+//     }
+
+//     req.user = { id: user.id, email: user.email, name: user.name };
+//     next();
+//   } catch (err) {
+    
+//     res.status(401).json({ success: false, message: "Only Admins are allowed." });
+//   }
+// }

@@ -139,6 +139,28 @@ export async function findUserById(id: number): Promise<UserRow | null> {
   );
   return rows[0] ?? null;
 }
+
+// export async function verifyAdmin(id: number): Promise<UserRow | null> {
+//   const { rows } = await pool.query<UserRow>(
+//     `SELECT
+//        u.id           AS user_id,
+       
+      
+//        wm.workspace_id,
+//        w.name         AS workspace_name,
+//        w.slug         AS workspace_slug,
+//        wm.role
+//      FROM users u
+//      JOIN workspace_members wm ON wm.user_id = u.id
+//      JOIN workspaces w         ON w.id = wm.workspace_id
+//      WHERE u.id = $1
+//      AND wm.role = 'admin'
+//      ORDER BY wm.joined_at ASC
+//      LIMIT 1`,
+//     [id]
+//   );
+//   return rows[0] ?? null;
+// }
 export async function findMeByUserId(user_id: number): Promise<MeRow | null> {
   const { rows } = await pool.query<MeRow>(
     `SELECT
@@ -189,7 +211,7 @@ export async function insertWorkspace(
   slug: string,
   owner_id: number
 ): Promise<WorkspaceRow> {
-  const { rows } = await pool.query<WorkspaceRow>(
+  const {rows} = await pool.query<WorkspaceRow>(
     `INSERT INTO workspaces (name, slug, owner_id)
      VALUES ($1, $2, $3)
      RETURNING *`,

@@ -9,9 +9,10 @@ import InviteMemberModal from "../../components/modal/InviteMemberModal";
 import { useMemberQueries } from "../../hooks/api/useMemberQueries";
 import { useInvitationQueries } from "../../hooks/api/useInvitationQueries";
 import type { Member } from "../../api/member.api";
+import { useAuth } from "../../hooks/AuthContext";
 
 // TODO: get from auth context / route params
-const WORKSPACE_ID = 1;
+// const WORKSPACE_ID = 1;
 
 const roleColors: Record<string, "info" | "purple" | "default"> = {
   admin: "purple",
@@ -26,7 +27,8 @@ const AdminMembers: React.FC = () => {
   const [tab, setTab]             = useState<Tab>("members");
   const [actionMenu, setActionMenu] = useState<number | null>(null);
   const [inviteOpen, setInviteOpen] = useState(false);
-
+   const { workspace } = useAuth()
+    const WORKSPACE_ID= Number(workspace?.id)
   const { members, pendingInvites, removeMember, changeRole } =
     useMemberQueries(WORKSPACE_ID);
 

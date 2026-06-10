@@ -7,6 +7,7 @@ import { memberApi } from '../../api/member.api';
 export const memberKeys = {
   all:     (wsId: number) => ['workspaces', wsId, 'members']          as const,
   pending: (wsId: number) => ['workspaces', wsId, 'members', 'pending'] as const,
+  managers:(wsId: number) => ['workspaces', wsId, 'members', 'managers'] as const
 };
 
 // ─── Hook ─────────────────────────────────────────────────────────────────────
@@ -19,8 +20,15 @@ export const useMemberQueries = (workspaceId: number) => {
     queryKey: memberKeys.all(workspaceId),
     queryFn:  () => memberApi.getAll(workspaceId),
     enabled:  Boolean(workspaceId),
-    staleTime: 1000 * 60,
+    // staleTime: 1000 * 60,
   });
+
+  const managers=useQuery({
+    queryKey: memberKeys.managers(workspaceId),
+    queryFn:  () => memberApi.getAllManagers(workspaceId),
+    enabled:  Boolean(workspaceId),
+    // staleTime: 1000 * 60,
+  })
 
   // ── GET pending invites ───────────────────────────────────────────────────
   const pendingInvites = useQuery({
@@ -49,6 +57,7 @@ export const useMemberQueries = (workspaceId: number) => {
 
   return {
     members,        // .data → Member[], .isLoading, .isError
+    managers,       // .data → Member[], .isLoading, .isError
     pendingInvites, // .data → PendingInvite[]
     removeMember,   // .mutateAsync(userId)
     changeRole,     // .mutateAsync({ userId, role })
