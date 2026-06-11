@@ -17,6 +17,7 @@ export interface AuthUser {
   id: number;
   email: string;
   name: string;
+  role?: "admin" | "manager" | "employee";  // ← attached by requireRole
 }
 
 export interface AuthRequest extends Request {

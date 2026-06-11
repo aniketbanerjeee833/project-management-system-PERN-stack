@@ -4,8 +4,11 @@ import {
   findMemberById,
   CreateProjectInput,
   fetchAllProjectsRepo,
+  findProjectsByManager,
+  
 } from "../../repositories/project/project.repository";
 import { Project } from "../../types/project.types";
+import { Task } from "../../types/task.types";
 import {AppError} from "../../utils/AppError";
 
 interface CreateProjectParams {
@@ -65,3 +68,15 @@ export async function fetchAllProjectsService(workspace_id: number): Promise<Pro
   return  fetchAllProjectsRepo(workspace_id);
   
 }
+export async function getProjectsByManagerService(
+  workspace_id: number,
+  manager_id: number
+) :Promise<Project[]> {
+  const projects = await findProjectsByManager(
+    workspace_id,
+    manager_id
+  );
+
+  return projects;
+}
+

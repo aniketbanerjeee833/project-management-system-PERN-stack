@@ -27,10 +27,10 @@ const AdminMembers: React.FC = () => {
   const [tab, setTab]             = useState<Tab>("members");
   const [actionMenu, setActionMenu] = useState<number | null>(null);
   const [inviteOpen, setInviteOpen] = useState(false);
-   const { workspace } = useAuth()
+   const { workspace,role } = useAuth()
     const WORKSPACE_ID= Number(workspace?.id)
   const { members, pendingInvites, removeMember, changeRole } =
-    useMemberQueries(WORKSPACE_ID);
+    useMemberQueries({workspaceId:WORKSPACE_ID,role:role!});
 
   const { sendInvite } = useInvitationQueries(WORKSPACE_ID);
 

@@ -36,7 +36,7 @@ interface ProjectForEdit {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 const AdminProjects: React.FC = () => {
-   const { workspace } = useAuth()
+   const { workspace,role } = useAuth()
       const workspaceId= Number(workspace?.id)
       console.log(workspaceId);
         const { managers} =useMemberQueries(workspaceId);
@@ -50,7 +50,7 @@ const AdminProjects: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<(ProjectFormData & { id: number }) | null>(null);
   const [submitting, setSubmitting] = useState(false);
-    const {createProject,projects} = useProjectQueries(workspaceId);
+    const {createProject,projects} = useProjectQueries({workspaceId,role: role!,});
     const projectList = projects.data ?? [];
     console.log('projects', projectList);
   const filtered = projectList?.filter(p =>

@@ -5,6 +5,7 @@ import {
   deleteMember,
   updateMemberRole,
   findManagersByWorkspace,
+  findEmployeesByWorkspace,
 } from "../../repositories/members/members.repository";
 
 // GET all members of a workspace
@@ -31,6 +32,16 @@ export async function removeMemberService(
 
 export async function getWorkspaceManagersService(workspace_id: number) {
   return findManagersByWorkspace(workspace_id);
+  // const { rows } = await pool.query(
+  //   `SELECT user_id
+  //    FROM workspace_members
+  //    WHERE workspace_id = $1 AND role = 'manager'`,
+  //   [workspace_id]
+  // );
+  // return rows.map((row) => row.user_id);
+}
+export async function getWorkspaceEmployeesService(workspace_id: number) {
+  return findEmployeesByWorkspace(workspace_id);
   // const { rows } = await pool.query(
   //   `SELECT user_id
   //    FROM workspace_members

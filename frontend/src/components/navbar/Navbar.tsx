@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, Bell, Sun, Moon, Search, ChevronDown } from 'lucide-react'
+import { Menu, Bell, Sun, Moon,  ChevronDown } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 import { useDarkMode } from '../../hooks/useDarkMode'

@@ -70,3 +70,30 @@ export async function findMemberById(
   );
   return rows[0] ?? null;
 }
+
+// src/repositories/project/project.repository.ts
+
+export async function findProjectsByManager(
+  workspace_id: number,
+  manager_id: number
+) :Promise<Project[]>{
+  const { rows } = await pool.query(
+    `SELECT
+       p.id,p.name,p.description,p.status,p.manager_id,
+    
+      TO_CHAR(p.start_date, 'YYYY-MM-DD') AS start_date,
+      TO_CHAR(p.due_date, 'YYYY-MM-DD') AS due_date,
+    p.created_at,p.updated_at,
+        u.name AS manager_name
+     FROM projects p
+     LEFT JOIN users u
+       ON u.id = p.manager_id
+     WHERE p.workspace_id = $1
+       AND p.manager_id = $2
+     ORDER BY p.created_at DESC`,
+    [workspace_id, manager_id]
+  );
+
+  return rows;
+}
+

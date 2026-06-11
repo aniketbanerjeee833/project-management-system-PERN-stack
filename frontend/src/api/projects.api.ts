@@ -67,5 +67,10 @@ export const projectApi = {
   remove: async (workspaceId: number, projectId: number): Promise<void> => {
     await api.delete(`/workspaces/${workspaceId}/projects/${projectId}`);
   },
+  getProjectsByManagers: async (workspaceId: number): Promise<Project[]> => {
+    const { data } = await api.get(`/workspaces/${workspaceId}/projects/managers`);
+    return data.data;
+  },
+  
 
 };

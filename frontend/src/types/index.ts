@@ -1,6 +1,6 @@
 export type Role = 'admin' | 'manager' | 'employee';
-export type TaskStatus = 'backlog' | 'todo' | 'in-progress' | 'review' | 'done';
-export type Priority = 'critical' | 'high' | 'medium' | 'low';
+export type TaskStatus = 'todo' | 'in_progress' | 'review' | 'done';
+export type Priority = "low" | "medium" | "high" | "urgent";
 export type UserStatus = 'active' | 'inactive' | 'pending';
 
 export interface User {
@@ -22,7 +22,9 @@ export interface Project {
   managerName: string;
   progress: number;
   teamCount: number;
-  dueDate: string;
+  start_date:string;
+  due_date:string;
+  // dueDate: string;
   status: 'active' | 'archived' | 'completed';
   color: string;
   tags: string[];
@@ -35,13 +37,13 @@ export interface Task {
   projectId: string;
   projectName: string;
   assigneeId: string;
-  assigneeName: string;
-  assignedById: string;
-  assignedByName: string;
+  assignee_name: string;
+  // assignedById: string;
+  // assignedByName: string;
   priority: Priority;
   status: TaskStatus;
-  dueDate: string;
-  tags: string[];
+  due_date: string;
+ 
   createdAt: string;
 }
 

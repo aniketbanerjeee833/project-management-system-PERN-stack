@@ -8,18 +8,21 @@ import {
   removeMemberController,
   changeMemberRoleController,
   getWorkspaceManagersController,
+  getWorkspaceEmployeesController,
 } from "../controllers/members/members.controller";
+import { requireRole } from "../middlewares/requireRole";
 
 const router = Router({ mergeParams: true });
 // mergeParams: true → access :workspaceId from parent router
 
 // GET  /workspaces/:workspaceId/members
-router.get(  "/",                   authenticate, asyncHandler(getMembersController));
+router.get(  "/",                   authenticate,requireRole(["admin"]), asyncHandler(getMembersController));
 
-router.get("/managers",  authenticate,asyncHandler(getWorkspaceManagersController));
+router.get("/managers",  authenticate, requireRole(["admin"]),asyncHandler(getWorkspaceManagersController));
+router.get("/employees", authenticate ,asyncHandler(getWorkspaceEmployeesController));
 
 // GET  /workspaces/:workspaceId/members/pending
-router.get(  "/pending",            authenticate, asyncHandler(getPendingInvitesController));
+router.get(  "/pending",            authenticate,requireRole(["admin"]), asyncHandler(getPendingInvitesController));
 
 // DELETE /workspaces/:workspaceId/members/:userId
 router.delete("/:userId",           authenticate, asyncHandler(removeMemberController));

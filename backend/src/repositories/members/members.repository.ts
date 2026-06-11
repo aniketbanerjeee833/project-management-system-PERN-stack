@@ -32,7 +32,7 @@ export async function findMembersByWorkspace(
 ): Promise<MemberRow[]> {
   const { rows } = await pool.query<MemberRow>(
     `SELECT
-       wm.id          AS member_id,
+     
        wm.role,
        wm.joined_at,
        u.id           AS user_id,
@@ -50,7 +50,7 @@ export async function findMembersByWorkspace(
 export async function findManagersByWorkspace(workspace_id: number) {
   const { rows } = await pool.query(
     `SELECT
-       wm.id AS member_id,
+      
        wm.role,
        u.id AS user_id,
        u.name,
@@ -66,6 +66,28 @@ export async function findManagersByWorkspace(workspace_id: number) {
 
   return rows;
 }
+
+export async function findEmployeesByWorkspace(workspace_id: number) {
+  const { rows } = await pool.query(
+    `SELECT
+      
+       wm.role,
+       u.id AS user_id,
+       u.name,
+       u.email,
+       u.avatar_url
+     FROM workspace_members wm
+     JOIN users u ON u.id = wm.user_id
+     WHERE wm.workspace_id = $1
+       AND wm.role = 'employee'
+     ORDER BY wm.joined_at ASC`,
+    [workspace_id]
+  );
+
+  return rows;
+}
+
+
 // All pending (not yet accepted) invitations for a workspace
 export async function findPendingInvitesByWorkspace(
   workspace_id: number

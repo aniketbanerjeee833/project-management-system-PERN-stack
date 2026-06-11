@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Users, FolderOpen, BarChart3, FileText,
-  Settings, Kanban, Bell, User, X, Zap, LogOut,
+  Settings, Bell, User, X, Zap, LogOut,
 } from 'lucide-react';
 import Avatar from '../shared/Avatar';
 import { useAuth } from '../../hooks/AuthContext';
@@ -28,7 +28,7 @@ const buildNav = (slug: string) => ({
   manager: [
     { to: `/${slug}/manager`,          icon: LayoutDashboard, label: 'Dashboard'    },
     { to: `/${slug}/manager/projects`, icon: FolderOpen,      label: 'Projects'     },
-    { to: `/${slug}/manager/kanban`,   icon: Kanban,          label: 'Kanban Board' },
+    // { to: `/${slug}/manager/kanban`,   icon: Kanban,          label: 'Kanban Board' },
     { to: `/${slug}/manager/team`,     icon: Users,           label: 'Team'         },
     { to: `/${slug}/manager/reports`,  icon: FileText,        label: 'Reports'      },
   ],

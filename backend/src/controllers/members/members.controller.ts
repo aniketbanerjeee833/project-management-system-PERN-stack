@@ -8,6 +8,7 @@ import {
   removeMemberService,
   changeMemberRoleService,
   getWorkspaceManagersService,
+  getWorkspaceEmployeesService,
 } from "../../services/members/members.service";
 
 // ── GET /workspaces/:workspaceId/members ──────────────────────────────────────
@@ -32,6 +33,18 @@ export async function getWorkspaceManagersController(
  const workspaceManagers=await getWorkspaceManagersService(workspace_id);
 // console.log(workspaceManagers);
   successResponse(res, workspaceManagers, "Workspace managers fetched successfully.");
+}
+
+export async function getWorkspaceEmployeesController(
+  req: AuthRequest,
+  res: Response
+): Promise<void> {
+  const workspace_id = Number(req.params.workspaceId);
+  // console.log(workspace_id);
+
+ const workspaceEmployees =await getWorkspaceEmployeesService(workspace_id);
+// console.log();
+  successResponse(res, workspaceEmployees, "Workspace managers fetched successfully.");
 }
 
 // ── GET /workspaces/:workspaceId/members/pending ──────────────────────────────

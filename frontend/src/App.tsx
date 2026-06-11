@@ -566,7 +566,7 @@ function AppRoutes() {
         >
           <Route path="/:slug/manager"          element={<ManagerDashboard />} />
           <Route path="/:slug/manager/projects" element={<ManagerProjects />} />
-          <Route path="/:slug/manager/kanban"   element={<KanbanBoard />} />
+          <Route path="/:slug/manager/projects/:projectId/kanban"   element={<KanbanBoard />} />
           <Route path="/:slug/manager/team"     element={<ManagerTeam />} />
           <Route path="/:slug/manager/reports"  element={<ManagerReports />} />
         </Route>

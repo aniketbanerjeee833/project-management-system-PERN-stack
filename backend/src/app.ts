@@ -5,6 +5,7 @@ import { errorHandler } from "./middlewares/errorHandler";
 
 // ── Route imports ────────────────────────────────────────────
 import projectRoutes     from "./routes/project.routes";
+import taskRoutes        from "./routes/task.routes";
 import invitationRoutes   from "./routes/invitation.routes";
 import publicInvitationRoutes from "./routes/public.invitation.routes";
 import membersRoutes from "./routes/members.routes";
@@ -45,6 +46,8 @@ const API = "/api/v1";
 // workspace-scoped routes  →  /api/v1/workspaces/:workspaceId/projects
 app.use(`${API}/auth`, authRoutes);
 app.use(`${API}/workspaces/:workspaceId/projects`,    projectRoutes);
+app.use(`${API}/workspaces/:workspaceId/projects/:projectId/tasks`, taskRoutes);
+// app.use(`${API}/workspaces/:workspaceId/task`,    taskRoutes);
 app.use(`${API}/workspaces/:workspaceId/invitations`,  invitationRoutes);
 app.use(`${API}/invitations`, publicInvitationRoutes);
 app.use(`${API}/workspaces/:workspaceId/members`, membersRoutes);

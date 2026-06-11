@@ -1,5 +1,5 @@
 import {  Response } from "express";
-import { createProjectService, fetchAllProjectsService } from "../../services/project/project.service";
+import { createProjectService, fetchAllProjectsService, getProjectsByManagerService } from "../../services/project/project.service";
 import { successResponse } from "../../utils/response";
 import { AuthRequest } from "../../types/auth.types";
 
@@ -52,3 +52,27 @@ export async function getAllProjectsController(
   const projects = await fetchAllProjectsService(workspace_id);
   successResponse(res, projects, "Projects fetched successfully.");
 }
+// src/controllers/project/project.controller.ts
+
+export async function getProjectsByManagerController(
+  req: AuthRequest,
+  res: Response
+): Promise<void> {
+  
+  
+  const workspace_id = Number(req.params.workspaceId);
+  
+  const manager_id = req.user!.id;
+
+  const projects = await getProjectsByManagerService(
+    workspace_id,
+    manager_id
+  );
+
+  successResponse(
+    res,
+    projects,
+    "Projects fetched successfully."
+  );
+}
+

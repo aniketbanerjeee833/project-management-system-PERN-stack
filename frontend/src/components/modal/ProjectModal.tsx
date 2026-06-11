@@ -7,6 +7,7 @@ import { X, Loader2 } from 'lucide-react';
 export interface Manager {
   id: number;
   name: string;
+  user_id: number;
 }
 
 export interface ProjectFormData {
@@ -58,7 +59,7 @@ const ProjectModal = ({
 
   const [form, setForm] = useState<ProjectFormData>(EMPTY);
   const [errors, setErrors] = useState<Partial<Record<keyof ProjectFormData, string>>>({});
-
+  console.log(managers);
   // Populate form when editing, reset when creating
   useEffect(() => {
     if (open) {
@@ -205,7 +206,7 @@ const ProjectModal = ({
                   >
                     <option value="">— No manager yet —</option>
                     {managers.map(m => (
-                      <option key={m.id} value={m.id}>{m.name}</option>
+                      <option key={m?.user_id} value={m?.user_id}>{m.name}</option>
                     ))}
                   </select>
                   <p className="mt-1 text-xs text-slate-400">
