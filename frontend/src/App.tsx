@@ -604,3 +604,11 @@ export default function App() {
     </AuthProvider>
   );
 }
+
+// Arjun drags "Fix login bug" from "To do" → "In progress"
+//   → updateTaskStatus.mutate({ taskId: 5, status: "in_progress" })
+//   → PATCH /workspaces/1/projects/3/tasks/5/status
+//   → requireTaskUpdateAccess: assignee_id===Arjun OR manager_id===Priya → ✓
+//   → UPDATE tasks SET status='in_progress'
+//   → invalidates query → board re-renders
+//   → Priya (manager), viewing same board, sees it move on her next refetch

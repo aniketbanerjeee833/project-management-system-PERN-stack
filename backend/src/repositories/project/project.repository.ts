@@ -71,6 +71,15 @@ export async function findMemberById(
   return rows[0] ?? null;
 }
 
+// export async function findManagerByProjectId(project_id: number): Promise<{ manager_id: number } | null> {
+//   const { rows } = await pool.query(
+//     `SELECT manager_id
+//      FROM projects
+//      WHERE id = $1`,
+//     [project_id]
+//   );
+//   return rows[0] ?? null;
+// }
 // src/repositories/project/project.repository.ts
 
 export async function findProjectsByManager(

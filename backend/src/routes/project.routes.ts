@@ -6,7 +6,7 @@ import { asyncHandler }    from "../middlewares/asyncHandler";
 import { createProjectSchema } from "../validators/project.validator";
 import { authenticate } from "../middlewares/authenticate";
 import { requireRole } from "../middlewares/requireRole";
-import { requireProjectAccess } from "../middlewares/requireProjectAccess";
+// import { requireProjectAccess } from "../middlewares/requireProjectAccess";
 
 const router = Router({ mergeParams: true });
 //  mergeParams: true  → gives access to :workspaceId from the parent router
@@ -29,7 +29,7 @@ router.get(
   "/managers",
   authenticate,
    requireRole(["manager"]),
-   requireProjectAccess(),
+  //  requireProjectAccess(),
   asyncHandler(getProjectsByManagerController)
 );
 

@@ -72,6 +72,11 @@ export async function getProjectsByManagerService(
   workspace_id: number,
   manager_id: number
 ) :Promise<Project[]> {
+
+  // const elligibleManager= await findManagerByProjectId(workspace_id,manager_id);
+  // if (!elligibleManager) {
+  //   throw new AppError("You are not authorized to view this project.", 403);
+  // }
   const projects = await findProjectsByManager(
     workspace_id,
     manager_id

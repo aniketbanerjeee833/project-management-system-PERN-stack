@@ -1,17 +1,29 @@
 // src/validators/task.validator.ts
 
 import { z } from "zod";
+// const taskParams = z.object({
+//   workspaceId: z.number().int().positive("Workspace ID is required and must be a number"),
+//   projectId:   z.number().int().positive("Project ID is required and must be a number"),
+// });
 const taskParams = z.object({
-  workspaceId: z.number().int().positive("Workspace ID is required and must be a number"),
-  projectId:   z.number().int().positive("Project ID is required and must be a number"),
+  workspaceId: z.coerce
+    .number()
+    .int()
+    .positive("Workspace ID is required and must be a number"),
+
+  projectId: z.coerce
+    .number()
+    .int()
+    .positive("Project ID is required and must be a number"),
 });
  
 export const createTaskSchema = z.object({
   body: z.object({
-    project_id: z
-      .number()
-      .int()
-      .positive("Project ID is required and must be a number"),
+     project_id: z.coerce.number().int().positive("Project ID is required and must be a number"),
+    // project_id: z
+    //   .number()
+    //   .int()
+    //   .positive("Project ID is required and must be a number"),
 
     title: z
       .string()
@@ -48,7 +60,7 @@ export const createTaskSchema = z.object({
 
 export const updateTaskSchema = createTaskSchema.extend({
   params: z.object({
-    taskId: z
+    taskId: z.coerce
       .number()
       .int()
       .positive("Task ID is required"),

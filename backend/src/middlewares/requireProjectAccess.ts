@@ -53,16 +53,19 @@ export function requireProjectAccess() {
     _res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const project_id = Number(req.params.projectId);
+    // const project_id = Number(req.params.projectId);
     const user_id    = req.user!.id;
 
-    if (!project_id) {
-      throw new AppError("Project ID is required.", 400);
-    }
+  
+
+    // const { rows } = await pool.query(
+    //   `SELECT 1 FROM projects WHERE id = $1 AND manager_id = $2`,
+    //   [project_id, user_id]
+    // );
 
     const { rows } = await pool.query(
-      `SELECT 1 FROM projects WHERE id = $1 AND manager_id = $2`,
-      [project_id, user_id]
+      `SELECT 1 FROM projects WHERE  manager_id = $2`,
+      [ user_id]
     );
 
     if (!rows.length) {

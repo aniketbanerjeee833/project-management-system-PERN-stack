@@ -62,7 +62,7 @@ export async function createTaskController(
 
   successResponse(res,task,"Task created successfully.",201);
 }
-
+//Manager
 export async function getTasksByProjectController(
   req: AuthRequest,
   res: Response
@@ -82,7 +82,7 @@ export async function getTasksByProjectController(
     "Tasks fetched successfully."
   );
 }
-
+//Employee
 export async function getTasksByEmployeeController(
   req: AuthRequest,
   res: Response
