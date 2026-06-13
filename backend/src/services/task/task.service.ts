@@ -1,6 +1,6 @@
 // services/task/task.service.ts
 
-import {findTasksByProject, insertTask } from "../../repositories/task/task.repository";
+import {findTasksByEmployee, findTasksByProject, insertTask } from "../../repositories/task/task.repository";
 import { Task } from "../../types/task.types";
 
 // import {
@@ -35,6 +35,17 @@ export async function getTasksByProjectService(
     project_id
   );
 }
+
+export async function getTasksByEmployeeService(
+  workspace_id: number,
+  employee_id: number
+): Promise<Task[]> {
+  return await findTasksByEmployee(
+    workspace_id,
+    employee_id
+  );
+}
+
 // export async function getAllTasksCreatedByManagerService(
 //   workspace_id: number,
 //   manager_id: number

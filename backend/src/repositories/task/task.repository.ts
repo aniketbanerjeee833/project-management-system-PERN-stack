@@ -96,3 +96,30 @@ export async function findTasksByProject(
 
   return rows;
 }
+
+export async function findTasksByEmployee(
+  workspace_id: number,
+  employee_id: number
+): Promise<Task[]> {
+
+  const { rows } = await pool.query<Task>(
+     `
+  SELECT
+    t.*,
+    u.name AS assignee_name,
+    p.name AS project_name
+  FROM tasks t
+  LEFT JOIN users u
+    ON u.id = t.assignee_id
+  LEFT JOIN projects p
+    ON p.id = t.project_id
+  WHERE t.workspace_id = $1
+    AND t.assignee_id = $2
+  ORDER BY t.position ASC, t.created_at ASC
+  `,
+
+    [workspace_id, employee_id]
+  );
+
+  return rows;
+}

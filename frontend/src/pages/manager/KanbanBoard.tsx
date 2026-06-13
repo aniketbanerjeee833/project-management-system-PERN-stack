@@ -92,7 +92,7 @@ const ProjectKanban: React.FC = () => {
  const { createTask , tasks} = useTaskQueries(workspaceId, projectIdNum);
   const taskList = tasks.data ?? [];
   const employeeList = employees.data ?? [];
-  console.log(employeeList, "employeeList",taskList);
+  ///console.log(employeeList, "employeeList",taskList);
 
   // ── Handlers ──────────────────────────────────────────────────────────────
   const openAddTask = (status: Task["status"]) => {

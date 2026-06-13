@@ -2,7 +2,7 @@ import {  Response } from "express";
 
 import { successResponse } from "../../utils/response";
 import { AuthRequest } from "../../types/auth.types";
-import { createTaskService,  getTasksByProjectService } from "../../services/task/task.service";
+import { createTaskService,  getTasksByEmployeeService,  getTasksByProjectService } from "../../services/task/task.service";
 
 
 // Returns MANY task objects
@@ -40,6 +40,14 @@ export async function createTaskController(
     parent_task_id,
   } = req.body;
 
+  if(!title || !assignee_id || !project_id){
+    res.status(400).json({
+      success: false,
+      message: "Title, assignee_id and project_id are required.",
+    });
+    return;
+    
+  }
   const task = await createTaskService({
     workspace_id,
     project_id,
@@ -74,6 +82,29 @@ export async function getTasksByProjectController(
     "Tasks fetched successfully."
   );
 }
+
+export async function getTasksByEmployeeController(
+  req: AuthRequest,
+  res: Response
+): Promise<void> {
+  
+  
+  const workspace_id = Number(req.params.workspaceId);
+  
+  const employee_id = req.user!.id;
+
+  const tasks = await getTasksByEmployeeService(
+    workspace_id,
+    employee_id
+  );
+ 
+  successResponse(
+    res,
+    tasks,
+    "Tasks fetched successfully."
+  );
+}
+
 // export async function getAllTasksCreatedByManagerController(
 //   req: AuthRequest,
 //   res: Response

@@ -6,9 +6,10 @@ import { authenticate }    from "../middlewares/authenticate";
 import { requireRole }     from "../middlewares/requireRole";
 import { validateRequest } from "../middlewares/validateRequest";
 import { asyncHandler }    from "../middlewares/asyncHandler";
-import { createTaskSchema } from "../validators/task.validator";
+import { createTaskSchema, getTasksByProjectSchema } from "../validators/task.validator";
 import {
   createTaskController,
+ 
   getTasksByProjectController,
 
  
@@ -31,8 +32,16 @@ router.post(
 router.get(
   "/",
   authenticate,
+   validateRequest(getTasksByProjectSchema),
   asyncHandler(getTasksByProjectController)
 );
+// ── Tasks assigned to logged-in employee ─────────────────────
+// router.get(
+//   "/employee",
+//   authenticate,
+//    requireRole(["employee"]),
+//   asyncHandler(getTasksByEmployeeController)
+// );
 
 // ── Get all tasks in project — any workspace member can view ──────────────────
 // router.get(
@@ -43,3 +52,53 @@ router.get(
 // );
 
 export default router;
+
+
+//CLAUDE GAVE 
+// src/routes/task.routes.ts — uses requireTaskAccess
+
+// import { Router } from "express";
+// import { authenticate }     from "../middlewares/authenticate";
+// import { requireRole }      from "../middlewares/requireRole";
+// import { requireTaskAccess } from "../middlewares/requireTaskAccess";
+// import { validateRequest }  from "../middlewares/validateRequest";
+// import { asyncHandler }     from "../middlewares/asyncHandler";
+// import { createTaskSchema, getTasksByProjectSchema } from "../validators/task.validator";
+// import {
+//   createTaskController,
+//   getTasksByProjectController,
+//   getTasksByEmployeeController,
+// } from "../controllers/task/task.controller";
+
+// const router = Router({ mergeParams: true });
+
+// // ── Create task — manager only, must own this project ──────────────────────────
+// router.post(
+//   "/add",
+//   authenticate,
+//   requireRole(["manager"]),
+//   requireTaskAccess(),                // ← task-level check
+//   validateRequest(createTaskSchema),
+//   asyncHandler(createTaskController)
+// );
+
+// // ── Get all tasks in project ────────────────────────────────────────────────────
+// router.get(
+//   "/",
+//   authenticate,
+//   requireRole(["manager", "employee"]),
+//   requireTaskAccess(),                // ← task-level check
+//   validateRequest(getTasksByProjectSchema),
+//   asyncHandler(getTasksByProjectController)
+// );
+
+// // ── Tasks assigned to logged-in employee, within this project ──────────────────
+// router.get(
+//   "/employee",
+//   authenticate,
+//   requireRole(["employee"]),
+//   requireTaskAccess(),                // ← task-level check
+//   asyncHandler(getTasksByEmployeeController)
+// );
+
+// export default router;

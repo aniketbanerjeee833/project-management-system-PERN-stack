@@ -1,13 +1,17 @@
 // src/validators/task.validator.ts
 
 import { z } from "zod";
-
+const taskParams = z.object({
+  workspaceId: z.number().int().positive("Workspace ID is required and must be a number"),
+  projectId:   z.number().int().positive("Project ID is required and must be a number"),
+});
+ 
 export const createTaskSchema = z.object({
   body: z.object({
     project_id: z
       .number()
       .int()
-      .positive("Project ID is required"),
+      .positive("Project ID is required and must be a number"),
 
     title: z
       .string()
@@ -25,12 +29,7 @@ export const createTaskSchema = z.object({
       .enum(["low", "medium", "high", "urgent"])
       .default("medium"),
 
-    assignee_id: z
-      .number()
-      .int()
-      .positive()
-      .nullable()
-      .optional(),
+    assignee_id:    z.coerce.number().int().positive("assignee_id is required"),
 
       due_date: z
       .string()
@@ -62,4 +61,7 @@ export const updateTaskSchema = createTaskSchema.extend({
         "done",
       ])
       .optional(),
+});
+export const getTasksByProjectSchema = z.object({
+  params: taskParams,
 });
